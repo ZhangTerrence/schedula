@@ -1,5 +1,12 @@
-function App() {
-  return <div className={"h-screen w-screen bg-black"}></div>;
-}
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Login } from "./pages/Login";
 
-export default App;
+export const App = () => {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path={"/"} element={<Login />} />
+      </Routes>
+    </BrowserRouter>
+  );
+};
