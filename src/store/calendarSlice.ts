@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { RootState } from "./store";
 import generateMonth from "../utilities/generateMonth";
 import dayjs from "dayjs";
 
@@ -27,8 +26,5 @@ export const calendarSlice = createSlice({
 });
 
 export const { updateCalendar } = calendarSlice.actions;
-
-export const selectIndex = (state: RootState) => state.calendar.index;
-export const selectMonth = (state: RootState) => state.calendar.month;
 
 export default calendarSlice.reducer;

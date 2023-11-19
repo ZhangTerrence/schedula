@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { RootState } from "./store";
 
 export type TasksState = {
   tasks: string[];
@@ -14,7 +13,5 @@ export const tasksSlice = createSlice({
   initialState,
   reducers: {},
 });
-
-export const selectTasks = (state: RootState) => state.tasks.tasks;
 
 export default tasksSlice.reducer;

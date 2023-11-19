@@ -63,7 +63,7 @@ export const SideCalendar = () => {
         </header>
         <div className={"grid grid-cols-7 grid-rows-7"}>
           {sideCalendar.month[0].map((day) => {
-            const weekday = day.format("dd");
+            const weekday = day.format("ddd");
             return (
               <p
                 className={"select-none py-2 text-center text-sm text-negative"}

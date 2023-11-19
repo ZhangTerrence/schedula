@@ -30,7 +30,7 @@ export const Navbar = ({ user }: { user: User }) => {
           <>
             <div
               className={
-                "absolute right-0 top-full z-20 mt-4 w-[30rem] rounded-md border border-solid border-negative p-4"
+                "absolute right-0 top-full z-20 mt-4 w-[30rem] rounded-md border border-solid border-negative bg-primary p-4"
               }
             >
               <FaPlus
