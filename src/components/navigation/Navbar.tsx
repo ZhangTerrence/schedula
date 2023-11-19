@@ -20,7 +20,7 @@ export const Navbar = ({ user }: { user: User }) => {
       <div className={"relative flex h-full items-center"}>
         <img
           className={
-            "aspect-square w-10 rounded-full shadow-negative hover:shadow"
+            "aspect-square w-10 rounded-full border-2 border-solid border-negative"
           }
           src={user.user_metadata.avatar_url}
           alt="user pfp"
@@ -43,7 +43,7 @@ export const Navbar = ({ user }: { user: User }) => {
                 <p className={"text-negative"}>{user.email}</p>
                 <img
                   className={
-                    "aspect-square w-24 rounded-full shadow-negative hover:shadow"
+                    "aspect-square w-24 rounded-full border-2 border-solid border-negative"
                   }
                   src={user.user_metadata.avatar_url}
                   alt="user pfp"

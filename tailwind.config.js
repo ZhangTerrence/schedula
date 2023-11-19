@@ -10,6 +10,9 @@ export default {
         accent: "var(--color--accent)",
         negative: "var(--color--negative)",
       },
+      gridTemplateRows: {
+        7: "repeat(7, minmax(0, 1fr))",
+      },
     },
   },
   plugins: [],

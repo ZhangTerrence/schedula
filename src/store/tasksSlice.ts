@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { RootState } from "./store";
 
-interface TasksState {
-  tasks: number;
-}
+export type TasksState = {
+  tasks: string[];
+};
 
 const initialState: TasksState = {
-  tasks: 0,
+  tasks: [],
 };
 
 export const tasksSlice = createSlice({
