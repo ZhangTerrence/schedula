@@ -1,11 +1,11 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useAuth } from "./hooks/useAuth";
+import { useSession } from "./hooks/useSession";
 import { Signin } from "./pages/Signin";
 import { Signup } from "./pages/Signup";
 import { Home } from "./pages/Home";
 
 export const App = () => {
-  const { session } = useAuth();
+  const { session } = useSession();
 
   return (
     <BrowserRouter>

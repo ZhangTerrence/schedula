@@ -1,20 +1,13 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import supabase from "../config/supabase";
+import { Navigate } from "react-router-dom";
 import type { Session } from "@supabase/supabase-js";
+import { Navbar } from "../components/navigation/Navbar";
 
 export const Home = ({ session }: { session: Session | null }) => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!session) {
-      navigate("/signin");
-    }
-  }, [session]);
+  if (!session) return <Navigate to={"/signin"} />;
 
   return (
-    <main>
-      <button onClick={() => supabase.auth.signOut()}>Log out</button>
+    <main className={"flex h-fit min-h-screen w-screen flex-col bg-primary"}>
+      <Navbar user={session.user} />
     </main>
   );
 };

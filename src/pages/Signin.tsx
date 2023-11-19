@@ -2,8 +2,13 @@ import { FormEvent, MouseEvent, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import type { Provider } from "@supabase/supabase-js";
 import supabase from "../config/supabase";
-import { useAuth } from "../hooks/useAuth";
-import { IoLogoGoogle, IoLogoGithub } from "react-icons/io5";
+import { Loading } from "../components/Loading";
+import { useSession } from "../hooks/useSession";
+import {
+  IoLogoGoogle,
+  IoLogoGithub,
+  IoCalendarClearSharp,
+} from "react-icons/io5";
 
 export const Signin = () => {
   const [credentials, setCredentials] = useState({
@@ -12,7 +17,7 @@ export const Signin = () => {
   });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { session } = useAuth();
+  const { session } = useSession();
 
   const handleCredentialSignin = async (e: FormEvent | MouseEvent) => {
     e.preventDefault();
@@ -47,18 +52,21 @@ export const Signin = () => {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
-
   if (session) return <Navigate to={"/"} />;
 
   return (
     <main
       className={
-        "grid h-fit min-h-screen w-screen place-content-center bg-primary p-16"
+        "relative flex h-fit min-h-screen w-screen flex-col items-center justify-center gap-y-12 bg-primary p-16"
       }
     >
+      <Loading loading={loading} />
+      <div className={"flex items-center gap-x-4 text-6xl text-negative"}>
+        <IoCalendarClearSharp />
+        Schedula
+      </div>
       <div className={"flex w-[30rem] flex-col items-center gap-y-6"}>
-        <div className={"flex w-full flex-col gap-y-6"}>
+        <div className={"w-full space-y-6"}>
           <button
             className="flex w-full items-center justify-center gap-x-4 rounded-xl bg-negative p-2 text-xl font-semibold text-primary hover:bg-gray-200"
             onClick={(e) => handleOAuthSignin(e, "google")}
@@ -75,7 +83,7 @@ export const Signin = () => {
           </button>
         </div>
         <hr className={"h-0.5 w-full bg-negative"} />
-        <form className={"flex w-full flex-col gap-y-4"}>
+        <form className={"w-full space-y-4"}>
           <div className={"flex w-full flex-col"}>
             <label className="mb-2 text-xl text-negative" htmlFor="email">
               Email
