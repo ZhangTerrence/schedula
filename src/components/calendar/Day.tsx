@@ -1,7 +1,7 @@
 import { useRedux } from "../../hooks/useRedux";
 import dayjs from "dayjs";
 
-export const CalendarDay = ({ day }: { day: dayjs.Dayjs }) => {
+export const Day = ({ day }: { day: dayjs.Dayjs }) => {
   const { useAppSelector } = useRedux();
   const calendarState = useAppSelector((state) => state.calendar);
 

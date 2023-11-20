@@ -3,7 +3,7 @@ import { TasksList } from "./TasksList";
 import { SideCalendar } from "./SideCalendar";
 
 export const Sidebar = () => {
-  const [tasksMode, setTasksMode] = useState(false);
+  const [mode, setMode] = useState<"events" | "tasks">("events");
 
   return (
     <div
@@ -14,26 +14,26 @@ export const Sidebar = () => {
       <div className={"flex w-full justify-between p-4"}>
         <button
           className={`${
-            tasksMode
-              ? "bg-secondary text-negative"
-              : "bg-negative text-primary"
+            mode === "events"
+              ? "bg-negative text-primary"
+              : "bg-secondary text-negative"
           } grow rounded-bl-md rounded-tl-md py-2 text-xl font-semibold`}
-          onClick={() => setTasksMode(false)}
+          onClick={() => setMode("events")}
         >
           Events
         </button>
         <button
           className={`${
-            tasksMode
+            mode === "tasks"
               ? "bg-negative text-primary"
               : "bg-secondary text-negative"
           } grow rounded-br-md rounded-tr-md py-2 text-xl font-semibold`}
-          onClick={() => setTasksMode(true)}
+          onClick={() => setMode("tasks")}
         >
           Tasks
         </button>
       </div>
-      {tasksMode ? <TasksList /> : <SideCalendar />}
+      {mode === "events" ? <SideCalendar /> : <TasksList />}
     </div>
   );
 };

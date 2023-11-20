@@ -77,11 +77,10 @@ export const SideCalendar = () => {
             return (
               <Fragment key={i}>
                 {week.map((day) => {
-                  const date = day.format("DD");
                   return (
                     <button
                       onClick={() => dispatch(updateCalendar(sideCalendar))}
-                      key={`${i}-${date}`}
+                      key={`${i}-${day.format("DD")}`}
                     >
                       <p
                         className={`
@@ -93,7 +92,7 @@ export const SideCalendar = () => {
                           ${isToday(day) ? "bg-accent" : ""} 
                           rounded-full text-center`}
                       >
-                        {date}
+                        {day.format("DD")}
                       </p>
                     </button>
                   );
