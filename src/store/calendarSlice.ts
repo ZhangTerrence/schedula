@@ -4,13 +4,21 @@ import generateMonth from "../utilities/generateMonth";
 import dayjs from "dayjs";
 
 export type CalendarState = {
-  index: number;
-  month: dayjs.Dayjs[][];
+  array: dayjs.Dayjs[][];
+  current: {
+    month: number;
+    week: number;
+    day: number;
+  };
 };
 
 const initialState: CalendarState = {
-  index: dayjs().month(),
-  month: generateMonth(),
+  array: generateMonth(),
+  current: {
+    month: dayjs().month(),
+    week: 0,
+    day: 0,
+  },
 };
 
 export const calendarSlice = createSlice({

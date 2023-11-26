@@ -8,10 +8,11 @@
   }
 
   html[data-theme="dark"] {
-    --color--primary: #050505;
-    --color--secondary: #333333;
-    --color--tertiary: #001e3c;
-    --color--accent: #4b0082;
-    --color--negative: #ffffff;
+    --color--primary: #161a1d;
+    --color--secondary: #454f59;
+    --color--tertiary: #777777;
+    --color--accent: #073b3a;
+    --color--accent-secondary: #131385;
+    --color--negative: #dee4ea;
   }
 }

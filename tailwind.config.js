@@ -8,6 +8,7 @@ export default {
         secondary: "var(--color--secondary)",
         tertiary: "var(--color--tertiary)",
         accent: "var(--color--accent)",
+        "accent-secondary": "var(--color--accent-secondary)",
         negative: "var(--color--negative)",
       },
       gridTemplateRows: {

@@ -19,14 +19,14 @@ export const Day = ({ day }: { day: dayjs.Dayjs }) => {
         "flex flex-col items-center border border-solid border-secondary p-1"
       }
     >
-      <p
+      <button
         className={`
-          ${isCurrentMonth(day) ? "text-negative" : "text-secondary"} 
-          ${isToday(day) ? "bg-accent" : ""} 
+          ${isCurrentMonth(day) ? "text-negative" : "text-tertiary"} 
+          ${isToday(day) ? "bg-accent-secondary" : ""} 
           w-12 rounded-full text-center`}
       >
         {day.format("DD")}
-      </p>
+      </button>
     </div>
   );
 };

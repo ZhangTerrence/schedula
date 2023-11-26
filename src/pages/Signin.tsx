@@ -89,7 +89,7 @@ export const Signin = () => {
               Email
             </label>
             <input
-              className="rounded-md border border-solid border-negative bg-transparent p-2 text-xl text-negative outline-none transition-colors duration-300 focus:border-secondary "
+              className="rounded-md border border-solid border-negative bg-transparent p-2 text-xl text-negative outline-none transition-colors duration-300 focus:border-tertiary"
               name="email"
               type="email"
               placeholder={"Email"}
@@ -110,7 +110,7 @@ export const Signin = () => {
               Password
             </label>
             <input
-              className="rounded-md border border-solid border-negative bg-transparent p-2 text-xl text-negative outline-none transition-colors duration-300 focus:border-secondary"
+              className="rounded-md border border-solid border-negative bg-transparent p-2 text-xl text-negative outline-none transition-colors duration-300 focus:border-tertiary"
               name="password"
               type="password"
               placeholder={"Password"}
@@ -135,7 +135,7 @@ export const Signin = () => {
         <p className="flex gap-x-2 text-xl text-negative">
           Don't have an account?
           <a
-            className="cursor-pointer underline hover:text-gray-200"
+            className="cursor-pointer underline hover:text-tertiary"
             onClick={() => navigate("/signup")}
           >
             Sign Up

@@ -6,19 +6,117 @@ import { useRedux } from "../../hooks/useRedux";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 
 export const SideCalendar = () => {
-  const [sideCalendar, setSideCalendar] = useState<CalendarState>({
-    index: dayjs().month(),
-    month: generateMonth(),
-  });
-  const { useAppDispatch } = useRedux();
+  const { useAppDispatch, useAppSelector } = useRedux();
+  const calendarState = useAppSelector((state) => state.calendar);
+  const [sideCalendar, setSideCalendar] =
+    useState<CalendarState>(calendarState);
+  const [selectedDay, setSelectedDay] = useState(dayjs().format("DD-MM-YY"));
   const dispatch = useAppDispatch();
 
+  const isSelectedDay = (day: dayjs.Dayjs) => {
+    return day.format("DD-MM-YY") === selectedDay;
+  };
+
   const isCurrentMonth = (day: dayjs.Dayjs) => {
-    return parseInt(day.format("MM")) === (sideCalendar.index % 12) + 1;
+    return parseInt(day.format("MM")) === (sideCalendar.current.month % 12) + 1;
   };
 
   const isToday = (day: dayjs.Dayjs) => {
     return day.format("DD-MM-YY") === dayjs().format("DD-MM-YY");
+  };
+
+  const changeDate = (day: dayjs.Dayjs, i: number, j: number) => {
+    if (i <= 1 && parseInt(day.format("D")) >= 14) {
+      let month = sideCalendar.current.month - 1;
+      console.log(month);
+      const array = generateMonth(month);
+
+      for (let i = 4; i <= 5; i++) {
+        for (let j = 0; j <= 6; j++) {
+          if (array[i][j].format("D") === day.format("D")) {
+            setSelectedDay(array[i][j].format("DD-MM-YY"));
+
+            setSideCalendar({
+              array,
+              current: {
+                month,
+                week: i,
+                day: j,
+              },
+            });
+
+            dispatch(
+              updateCalendar({
+                array,
+                current: {
+                  month,
+                  week: i,
+                  day: j,
+                },
+              }),
+            );
+
+            return;
+          }
+        }
+      }
+    } else if (i >= 4 && parseInt(day.format("D")) <= 14) {
+      let month = sideCalendar.current.month + 1;
+      const array = generateMonth(month);
+
+      for (let i = 0; i <= 1; i++) {
+        for (let j = 0; j <= 6; j++) {
+          if (array[i][j].format("D") === day.format("D")) {
+            setSelectedDay(array[i][j].format("DD-MM-YY"));
+
+            setSideCalendar({
+              array,
+              current: {
+                month,
+                week: i,
+                day: j,
+              },
+            });
+
+            dispatch(
+              updateCalendar({
+                array,
+                current: {
+                  month,
+                  week: i,
+                  day: j,
+                },
+              }),
+            );
+
+            return;
+          }
+        }
+      }
+    }
+
+    const month = sideCalendar.current.month;
+    setSelectedDay(day.format("DD-MM-YY"));
+    setSideCalendar((calendar) => {
+      return {
+        ...calendar,
+        current: {
+          month,
+          week: i,
+          day: j,
+        },
+      };
+    });
+    dispatch(
+      updateCalendar({
+        ...calendarState,
+        current: {
+          month,
+          week: i,
+          day: j,
+        },
+      }),
+    );
   };
 
   return (
@@ -32,10 +130,15 @@ export const SideCalendar = () => {
           <button
             className={"absolute bottom-0 left-0 top-0 m-auto ml-4"}
             onClick={() =>
-              setSideCalendar((prev) => {
+              setSideCalendar((calendar) => {
+                const month = calendar.current.month - 1;
+
                 return {
-                  index: prev.index - 1,
-                  month: generateMonth(prev.index - 1),
+                  array: generateMonth(month),
+                  current: {
+                    ...calendar.current,
+                    month,
+                  },
                 };
               })
             }
@@ -43,17 +146,22 @@ export const SideCalendar = () => {
             <FaChevronLeft className={"text-xl text-negative"} />
           </button>
           <p className={"text-center text-xl text-negative"}>
-            {dayjs(new Date(dayjs().year(), sideCalendar.index)).format(
+            {dayjs(new Date(dayjs().year(), sideCalendar.current.month)).format(
               "MMMM YYYY",
             )}
           </p>
           <button
             className={"absolute bottom-0 right-0 top-0 m-auto mr-4"}
             onClick={() =>
-              setSideCalendar((prev) => {
+              setSideCalendar((calendar) => {
+                const month = calendar.current.month + 1;
+
                 return {
-                  index: prev.index + 1,
-                  month: generateMonth(prev.index + 1),
+                  array: generateMonth(month),
+                  current: {
+                    ...calendar.current,
+                    month,
+                  },
                 };
               })
             }
@@ -62,7 +170,7 @@ export const SideCalendar = () => {
           </button>
         </header>
         <div className={"grid grid-cols-7 grid-rows-7"}>
-          {sideCalendar.month[0].map((day) => {
+          {sideCalendar.array[0].map((day) => {
             const weekday = day.format("ddd");
             return (
               <p
@@ -73,13 +181,13 @@ export const SideCalendar = () => {
               </p>
             );
           })}
-          {sideCalendar.month.map((week, i) => {
+          {sideCalendar.array.map((week, i) => {
             return (
               <Fragment key={i}>
-                {week.map((day) => {
+                {week.map((day, j) => {
                   return (
                     <button
-                      onClick={() => dispatch(updateCalendar(sideCalendar))}
+                      onClick={() => changeDate(day, i, j)}
                       key={`${i}-${day.format("DD")}`}
                     >
                       <p
@@ -87,9 +195,10 @@ export const SideCalendar = () => {
                           ${
                             isCurrentMonth(day)
                               ? "text-negative"
-                              : "text-secondary"
+                              : "text-tertiary"
                           } 
-                          ${isToday(day) ? "bg-accent" : ""} 
+                          ${isSelectedDay(day) ? "bg-accent" : ""} 
+                          ${isToday(day) ? "bg-accent-secondary" : ""} 
                           rounded-full text-center`}
                       >
                         {day.format("DD")}

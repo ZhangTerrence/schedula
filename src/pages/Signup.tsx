@@ -88,7 +88,7 @@ export const Signup = () => {
               Username
             </label>
             <input
-              className="rounded-md border border-solid border-negative bg-transparent p-2 text-xl text-negative outline-none transition-colors duration-300 focus:border-secondary "
+              className="rounded-md border border-solid border-negative bg-transparent p-2 text-xl text-negative outline-none transition-colors duration-300 focus:border-tertiary"
               name="username"
               type="text"
               placeholder={"Username"}
@@ -109,7 +109,7 @@ export const Signup = () => {
               Email
             </label>
             <input
-              className="rounded-md border border-solid border-negative bg-transparent p-2 text-xl text-negative outline-none transition-colors duration-300 focus:border-secondary "
+              className="rounded-md border border-solid border-negative bg-transparent p-2 text-xl text-negative outline-none transition-colors duration-300 focus:border-tertiary"
               name="email"
               type="email"
               placeholder={"Email"}
@@ -129,7 +129,7 @@ export const Signup = () => {
               Password
             </label>
             <input
-              className="rounded-md border border-solid border-negative bg-transparent p-2 text-xl text-negative outline-none transition-colors duration-300 focus:border-secondary"
+              className="rounded-md border border-solid border-negative bg-transparent p-2 text-xl text-negative outline-none transition-colors duration-300 focus:border-tertiary"
               name="password"
               type="password"
               placeholder={"Password"}
@@ -154,7 +154,7 @@ export const Signup = () => {
         <p className="flex gap-x-2 text-xl text-negative">
           Already have an account?
           <a
-            className="cursor-pointer underline hover:text-gray-200"
+            className="cursor-pointer underline hover:text-tertiary"
             onClick={() => navigate("/signin")}
           >
             Sign In
