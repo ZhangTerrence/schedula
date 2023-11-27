@@ -1,9 +1,10 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { type CalendarState, updateCalendar } from "../../store/calendarSlice";
 import generateMonth from "../../utilities/generateMonth";
 import dayjs from "dayjs";
 import { useRedux } from "../../hooks/useRedux";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
+import { changeMode } from "../../store/modeSlice";
 
 export const SideCalendar = () => {
   const { useAppDispatch, useAppSelector } = useRedux();
@@ -13,12 +14,21 @@ export const SideCalendar = () => {
   const [selectedDay, setSelectedDay] = useState(dayjs().format("DD-MM-YY"));
   const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    setSideCalendar(calendarState);
+    setSelectedDay(
+      calendarState.array[calendarState.current.week][
+        calendarState.current.day
+      ].format("DD-MM-YY"),
+    );
+  }, [calendarState]);
+
   const isSelectedDay = (day: dayjs.Dayjs) => {
     return day.format("DD-MM-YY") === selectedDay;
   };
 
   const isCurrentMonth = (day: dayjs.Dayjs) => {
-    return parseInt(day.format("MM")) === (sideCalendar.current.month % 12) + 1;
+    return parseInt(day.format("M")) === (sideCalendar.current.month % 12) + 1;
   };
 
   const isToday = (day: dayjs.Dayjs) => {
@@ -28,7 +38,6 @@ export const SideCalendar = () => {
   const changeDate = (day: dayjs.Dayjs, i: number, j: number) => {
     if (i <= 1 && parseInt(day.format("D")) >= 14) {
       let month = sideCalendar.current.month - 1;
-      console.log(month);
       const array = generateMonth(month);
 
       for (let i = 4; i <= 5; i++) {
@@ -187,8 +196,15 @@ export const SideCalendar = () => {
                 {week.map((day, j) => {
                   return (
                     <button
-                      onClick={() => changeDate(day, i, j)}
                       key={`${i}-${day.format("DD")}`}
+                      onClick={() => changeDate(day, i, j)}
+                      onDoubleClick={() =>
+                        dispatch(
+                          changeMode({
+                            mode: "day",
+                          }),
+                        )
+                      }
                     >
                       <p
                         className={`

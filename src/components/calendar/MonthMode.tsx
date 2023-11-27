@@ -24,8 +24,15 @@ export const MonthMode = ({ month }: { month: dayjs.Dayjs[][] }) => {
         {month.map((week, i) => {
           return (
             <Fragment key={i}>
-              {week.map((day) => {
-                return <Day key={`${i}-${day.format("DD")}`} day={day} />;
+              {week.map((day, j) => {
+                return (
+                  <Day
+                    key={`${i}-${day.format("DD")}`}
+                    day={day}
+                    localWeek={i}
+                    localDay={j}
+                  />
+                );
               })}
             </Fragment>
           );

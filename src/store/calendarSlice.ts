@@ -26,9 +26,7 @@ export const calendarSlice = createSlice({
   initialState,
   reducers: {
     updateCalendar: (_state, action: PayloadAction<CalendarState>) => {
-      return {
-        ...action.payload,
-      };
+      return action.payload;
     },
   },
 });

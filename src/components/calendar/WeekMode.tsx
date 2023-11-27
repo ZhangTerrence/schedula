@@ -1,7 +1,11 @@
+import { useRedux } from "../../hooks/useRedux";
 import { Day } from "./Day";
 import dayjs from "dayjs";
 
 export const WeekMode = ({ week }: { week: dayjs.Dayjs[] }) => {
+  const { useAppSelector } = useRedux();
+  const calendarState = useAppSelector((state) => state.calendar);
+
   return (
     <>
       <header className={"grid grid-cols-7"}>
@@ -20,8 +24,15 @@ export const WeekMode = ({ week }: { week: dayjs.Dayjs[] }) => {
         })}
       </header>
       <div className={"grid grow grid-cols-7"}>
-        {week.map((day, i) => {
-          return <Day key={`${i}-${day.format("DD")}`} day={day} />;
+        {week.map((day, j) => {
+          return (
+            <Day
+              key={`${j}-${day.format("DD")}`}
+              day={day}
+              localWeek={calendarState.current.week}
+              localDay={j}
+            />
+          );
         })}
       </div>
     </>

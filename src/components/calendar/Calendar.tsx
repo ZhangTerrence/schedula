@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useEffect, useCallback } from "react";
 import dayjs from "dayjs";
 import { useRedux } from "../../hooks/useRedux";
 import { updateCalendar } from "../../store/calendarSlice";
@@ -7,11 +7,12 @@ import { MonthMode } from "./MonthMode";
 import { WeekMode } from "./WeekMode";
 import { DayMode } from "./DayMode";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
+import { changeMode } from "../../store/modeSlice";
 
 export const Calendar = () => {
-  const [mode, setMode] = useState<"month" | "week" | "day">("month");
   const { useAppDispatch, useAppSelector } = useRedux();
   const calendarState = useAppSelector((state) => state.calendar);
+  const modeState = useAppSelector((state) => state.mode.mode);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -47,11 +48,11 @@ export const Calendar = () => {
   }, []);
 
   const renderHeader = useCallback(() => {
-    if (mode === "month") {
+    if (modeState === "month") {
       return dayjs(
         new Date(dayjs().year(), calendarState.current.month),
       ).format("MMMM YYYY");
-    } else if (mode === "week") {
+    } else if (modeState === "week") {
       if (
         parseInt(
           calendarState.array[calendarState.current.week][6].format("D"),
@@ -73,12 +74,12 @@ export const Calendar = () => {
         calendarState.current.day
       ].format("MMMM YYYY");
     }
-  }, [calendarState, mode]);
+  }, [calendarState, modeState]);
 
   const renderMode = useCallback(() => {
-    if (mode === "month") {
+    if (modeState === "month") {
       return <MonthMode month={calendarState.array} />;
-    } else if (mode === "week") {
+    } else if (modeState === "week") {
       return (
         <WeekMode week={calendarState.array[calendarState.current.week]} />
       );
@@ -92,7 +93,7 @@ export const Calendar = () => {
           }
         />
       );
-  }, [calendarState, mode]);
+  }, [calendarState, modeState]);
 
   const changeMonth = (op: number) => {
     const month = calendarState.current.month + op;
@@ -101,8 +102,9 @@ export const Calendar = () => {
       updateCalendar({
         array: generateMonth(month),
         current: {
-          ...calendarState.current,
           month,
+          week: 0,
+          day: 0,
         },
       }),
     );
@@ -169,7 +171,7 @@ export const Calendar = () => {
         j = 0;
       }
 
-      while (parseInt(array[i][j].format("D")) !== parseInt(day.format("D"))) {
+      while (array[i][j].format("D") !== day.format("D")) {
         if (op < 0) {
           if (j === 0) {
             i--;
@@ -326,9 +328,9 @@ export const Calendar = () => {
   };
 
   const changeDate = (op: number) => {
-    if (mode === "month") {
+    if (modeState === "month") {
       changeMonth(op);
-    } else if (mode === "week") {
+    } else if (modeState === "week") {
       changeWeek(op);
     } else {
       changeDay(op);
@@ -408,25 +410,47 @@ export const Calendar = () => {
         <div className={"flex"}>
           <button
             className={`${
-              mode === "month" ? "bg-negative text-primary" : "text-negative"
+              modeState === "month"
+                ? "bg-negative text-primary"
+                : "text-negative"
             } rounded-bl-md rounded-tl-md border border-solid border-negative px-4 py-1 font-bold`}
-            onClick={() => setMode("month")}
+            onClick={() => {
+              dispatch(
+                changeMode({
+                  mode: "month",
+                }),
+              );
+            }}
           >
             Month
           </button>
           <button
             className={`${
-              mode === "week" ? "bg-negative text-primary" : "text-negative"
+              modeState === "week"
+                ? "bg-negative text-primary"
+                : "text-negative"
             } border border-solid border-negative px-4 py-1 font-bold`}
-            onClick={() => setMode("week")}
+            onClick={() => {
+              dispatch(
+                changeMode({
+                  mode: "week",
+                }),
+              );
+            }}
           >
             Week
           </button>
           <button
             className={`${
-              mode === "day" ? "bg-negative text-primary" : "text-negative"
+              modeState === "day" ? "bg-negative text-primary" : "text-negative"
             } rounded-br-md rounded-tr-md border border-solid border-negative px-4 py-1 font-bold`}
-            onClick={() => setMode("day")}
+            onClick={() => {
+              dispatch(
+                changeMode({
+                  mode: "day",
+                }),
+              );
+            }}
           >
             Day
           </button>
