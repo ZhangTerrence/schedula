@@ -3,6 +3,8 @@ import dayjs from "dayjs";
 import { updateCalendar } from "../../store/calendarSlice";
 import { changeMode } from "../../store/modeSlice";
 import generateMonth from "../../utilities/generateMonth";
+import { Popup } from "../popup/Popup";
+import { useState } from "react";
 
 export const Day = ({
   day,
@@ -13,6 +15,7 @@ export const Day = ({
   localWeek: number;
   localDay: number;
 }) => {
+  const [popup, setPopup] = useState(false);
   const { useAppSelector, useAppDispatch } = useRedux();
   const calendarState = useAppSelector((state) => state.calendar);
   const dispatch = useAppDispatch();
@@ -97,29 +100,63 @@ export const Day = ({
     );
   };
 
+  const closePopup = () => {
+    setPopup(false);
+  };
+
   return (
-    <div
-      className={
-        "flex flex-col items-center border border-solid border-secondary p-1"
-      }
-    >
-      <button
-        className={`
+    <>
+      <div
+        className={
+          "flex flex-col items-center gap-y-2 border border-solid border-secondary p-1"
+        }
+        onClick={() => setPopup(true)}
+      >
+        <button
+          className={`
           ${isCurrentMonth(day) ? "text-negative" : "text-tertiary"} 
           ${isSelectedDay(day) ? "bg-accent" : ""} 
           ${isToday(day) ? "bg-accent-secondary" : ""} 
-          w-12 rounded-full text-center`}
-        onClick={() => {
-          changeDate();
-          dispatch(
-            changeMode({
-              mode: "day",
-            }),
-          );
-        }}
-      >
-        {day.format("DD")}
-      </button>
-    </div>
+          w-12 rounded-full text-center hover:bg-negative hover:text-primary`}
+          onClick={() => {
+            changeDate();
+            dispatch(
+              changeMode({
+                mode: "day",
+              }),
+            );
+          }}
+        >
+          {day.format("DD")}
+        </button>
+        <div className={"w-full flex-1"}>
+          {/* {tasksState.map((task) => {
+            return <div className={"basis-1/3"}>{task}</div>;
+          })} */}
+          {/* <div
+            className={
+              "cursor-pointer rounded-md border border-solid border-secondary px-1 text-sm text-negative"
+            }
+          >
+            {"Hello"}
+          </div>
+          <div
+            className={
+              "cursor-pointer rounded-md border border-solid border-secondary px-1 text-sm text-negative"
+            }
+          >
+            {"Hello"}
+          </div>
+          <div
+            className={
+              "cursor-pointer rounded-md border border-solid border-secondary px-1 text-sm text-negative"
+            }
+          >
+            {"Hello"}
+          </div> */}
+        </div>
+      </div>
+      {popup ? <Popup closePopup={closePopup} day={day} /> : null}
+    </>
   );
 };

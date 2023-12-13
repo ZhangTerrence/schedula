@@ -5,7 +5,7 @@ export type TasksState = {
 };
 
 const initialState: TasksState = {
-  tasks: [],
+  tasks: ["Hello"],
 };
 
 export const tasksSlice = createSlice({

@@ -338,7 +338,7 @@ export const Calendar = () => {
   };
 
   return (
-    <div className={"flex grow flex-col overflow-y-scroll"}>
+    <div className={"flex grow flex-col"}>
       <header
         className={
           "flex h-16 w-full items-center justify-between border-b border-solid border-negative p-4"

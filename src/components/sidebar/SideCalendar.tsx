@@ -215,7 +215,7 @@ export const SideCalendar = () => {
                           } 
                           ${isSelectedDay(day) ? "bg-accent" : ""} 
                           ${isToday(day) ? "bg-accent-secondary" : ""} 
-                          rounded-full text-center`}
+                          rounded-full text-center hover:bg-negative hover:text-primary`}
                       >
                         {day.format("DD")}
                       </p>
