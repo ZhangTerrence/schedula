@@ -91,6 +91,8 @@ export const Calendar = () => {
               calendarState.current.day
             ]
           }
+          localWeek={calendarState.current.week}
+          localDay={calendarState.current.day}
         />
       );
   }, [calendarState, modeState]);
@@ -338,16 +340,16 @@ export const Calendar = () => {
   };
 
   return (
-    <div className={"flex grow flex-col"}>
+    <div className={"flex h-full max-h-full w-4/5 max-w-[80%] flex-col"}>
       <header
         className={
-          "flex h-16 w-full items-center justify-between border-b border-solid border-negative p-4"
+          "flex h-fit w-full items-center justify-between border-b border-solid border-negative p-4"
         }
       >
-        <div className={"flex"}>
+        <div className={"flex items-center"}>
           <button
             className={
-              "mr-2 rounded-md border border-solid border-negative px-4 font-bold tracking-wider text-negative"
+              "mr-2 rounded-md border border-solid border-negative px-4 text-sm font-bold leading-8 text-negative"
             }
             onClick={() => {
               const month = parseInt(dayjs().format("M")) - 1;
@@ -388,7 +390,7 @@ export const Calendar = () => {
           <div className={"flex"}>
             <button
               className={
-                "rounded-bl-md rounded-tl-md border border-solid border-negative px-4 text-negative"
+                "h-fit rounded-bl-md rounded-tl-md border border-solid border-negative px-4 py-2 font-bold leading-8 text-negative"
               }
               onClick={() => changeDate(-1)}
             >
@@ -396,14 +398,14 @@ export const Calendar = () => {
             </button>
             <button
               className={
-                "rounded-br-md rounded-tr-md border border-solid border-negative px-4 text-negative"
+                "h-fit rounded-br-md rounded-tr-md border border-solid border-negative px-4 py-2 font-bold leading-8 text-negative"
               }
               onClick={() => changeDate(1)}
             >
               <FaChevronRight className={"text-sm text-negative"} />
             </button>
           </div>
-          <p className={"px-4 text-2xl font-bold text-negative"}>
+          <p className={"px-4 text-xl font-bold text-negative"}>
             {renderHeader()}
           </p>
         </div>
@@ -456,7 +458,9 @@ export const Calendar = () => {
           </button>
         </div>
       </header>
-      <div className={"flex grow flex-col"}>{renderMode()}</div>
+      <div className={"flex h-full max-h-full flex-col overflow-scroll"}>
+        {renderMode()}
+      </div>
     </div>
   );
 };

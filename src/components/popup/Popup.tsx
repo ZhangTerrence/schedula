@@ -2,6 +2,9 @@ import dayjs from "dayjs";
 import { useRef, useState } from "react";
 import supabase from "../../config/supabase";
 import { useSession } from "../../hooks/useSession";
+import { useRedux } from "../../hooks/useRedux";
+import { Event, addEvent } from "../../store/eventsSlice";
+import { Task, addTask } from "../../store/tasksSlice";
 
 export const Popup = ({
   day,
@@ -15,6 +18,8 @@ export const Popup = ({
   const titleRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const { session } = useSession();
+  const { useAppDispatch } = useRedux();
+  const dispatch = useAppDispatch();
 
   const create = async () => {
     if (!titleRef.current) {
@@ -38,6 +43,11 @@ export const Popup = ({
       titleRef.current.value = "";
       if (descriptionRef.current) {
         descriptionRef.current.value = "";
+      }
+      if (mode === "events") {
+        dispatch(addEvent(data[0] as Event));
+      } else {
+        dispatch(addTask(data[0] as Task));
       }
       closePopup();
     }

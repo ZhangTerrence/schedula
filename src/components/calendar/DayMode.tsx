@@ -1,6 +1,15 @@
 import dayjs from "dayjs";
+import { Day } from "./Day";
 
-export const DayMode = ({ day }: { day: dayjs.Dayjs }) => {
+export const DayMode = ({
+  day,
+  localWeek,
+  localDay,
+}: {
+  day: dayjs.Dayjs;
+  localWeek: number;
+  localDay: number;
+}) => {
   return (
     <>
       <header>
@@ -12,6 +21,7 @@ export const DayMode = ({ day }: { day: dayjs.Dayjs }) => {
           {day.format("dddd, MMMM D")}
         </p>
       </header>
+      <Day day={day} localWeek={localWeek} localDay={localDay} mode={"day"} />
     </>
   );
 };

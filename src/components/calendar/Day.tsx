@@ -4,21 +4,50 @@ import { updateCalendar } from "../../store/calendarSlice";
 import { changeMode } from "../../store/modeSlice";
 import generateMonth from "../../utilities/generateMonth";
 import { Popup } from "../popup/Popup";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { Object } from "../../store/tasksSlice";
 
 export const Day = ({
   day,
   localWeek,
   localDay,
+  mode,
 }: {
   day: dayjs.Dayjs;
   localWeek: number;
   localDay: number;
+  mode: "month" | "week" | "day";
 }) => {
   const [popup, setPopup] = useState(false);
   const { useAppSelector, useAppDispatch } = useRedux();
   const calendarState = useAppSelector((state) => state.calendar);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const eventsState = useAppSelector((state) => state.events.events);
+  const tasksState = useAppSelector((state) => state.tasks.tasks);
   const dispatch = useAppDispatch();
+
+  const tasks = tasksState.filter((event) => {
+    return (
+      dayjs(event.date).format("DD MMMM YYYY") === day.format("DD MMMM YYYY")
+    );
+  });
+  const amountTasks = tasks.length;
+
+  const events = eventsState.filter((event) => {
+    return (
+      dayjs(event.date).format("DD MMMM YYYY") === day.format("DD MMMM YYYY")
+    );
+  });
+  const amountEvents = events.length;
+
+  let display: Object[] = [];
+  if (amountTasks === 2) {
+    display = tasks.slice(0, 2);
+  } else if (amountTasks < 2) {
+    display = tasks
+      .slice(0, amountTasks)
+      .concat(events.slice(0, 2 - amountTasks));
+  }
 
   const isSelectedDay = (day: dayjs.Dayjs) => {
     return (
@@ -108,53 +137,103 @@ export const Day = ({
     <>
       <div
         className={
-          "flex flex-col items-center gap-y-2 border border-solid border-secondary p-1"
+          "flex flex-col items-center gap-y-2 border border-solid border-secondary p-2"
         }
         onClick={() => setPopup(true)}
       >
-        <button
-          className={`
+        {mode !== "day" ? (
+          <button
+            className={`
           ${isCurrentMonth(day) ? "text-negative" : "text-tertiary"} 
           ${isSelectedDay(day) ? "bg-accent" : ""} 
           ${isToday(day) ? "bg-accent-secondary" : ""} 
           w-12 rounded-full text-center hover:bg-negative hover:text-primary`}
-          onClick={() => {
-            changeDate();
-            dispatch(
-              changeMode({
-                mode: "day",
-              }),
-            );
-          }}
-        >
-          {day.format("DD")}
-        </button>
-        <div className={"w-full flex-1"}>
-          {/* {tasksState.map((task) => {
-            return <div className={"basis-1/3"}>{task}</div>;
-          })} */}
-          {/* <div
-            className={
-              "cursor-pointer rounded-md border border-solid border-secondary px-1 text-sm text-negative"
-            }
+            onClick={() => {
+              changeDate();
+              dispatch(
+                changeMode({
+                  mode: "day",
+                }),
+              );
+            }}
           >
-            {"Hello"}
+            {day.format("DD")}
+          </button>
+        ) : null}
+        {mode === "month" ? (
+          <div
+            className={"flex w-full grow flex-col gap-y-1"}
+            ref={containerRef}
+          >
+            {display.map((object, i) => {
+              return (
+                <div
+                  key={i}
+                  className={
+                    "overflow-hidden text-ellipsis rounded-full border border-solid border-negative px-4 py-1 text-sm text-negative"
+                  }
+                >
+                  {object.title}
+                </div>
+              );
+            })}
+            {amountEvents + amountTasks > 2 ? (
+              <button
+                className={
+                  "w-full overflow-hidden text-ellipsis rounded-full border border-solid border-negative px-4 py-1 text-sm text-negative"
+                }
+                onClick={() => console.log("a")}
+              >
+                {amountEvents + amountTasks - 2} more
+              </button>
+            ) : null}
           </div>
+        ) : (
           <div
             className={
-              "cursor-pointer rounded-md border border-solid border-secondary px-1 text-sm text-negative"
+              "flex w-full grow flex-col gap-y-px overflow-scroll px-3"
             }
           >
-            {"Hello"}
+            {tasks.map((task, i) => {
+              return (
+                <div
+                  className={"border-b border-solid border-negative py-4"}
+                  key={i}
+                >
+                  <div
+                    className={
+                      "overflow-hidden text-ellipsis break-words text-negative"
+                    }
+                  >
+                    {task.title}
+                  </div>
+                  <div className={"line-clamp-4 break-words text-negative"}>
+                    {task.description}
+                  </div>
+                </div>
+              );
+            })}
+            {events.map((event, j) => {
+              return (
+                <div
+                  className={"border-b border-solid border-negative py-4"}
+                  key={j}
+                >
+                  <div
+                    className={
+                      "overflow-hidden text-ellipsis break-words text-negative"
+                    }
+                  >
+                    {event.title}
+                  </div>
+                  <div className={"line-clamp-4 break-words text-negative"}>
+                    {event.description}
+                  </div>
+                </div>
+              );
+            })}
           </div>
-          <div
-            className={
-              "cursor-pointer rounded-md border border-solid border-secondary px-1 text-sm text-negative"
-            }
-          >
-            {"Hello"}
-          </div> */}
-        </div>
+        )}
       </div>
       {popup ? <Popup closePopup={closePopup} day={day} /> : null}
     </>

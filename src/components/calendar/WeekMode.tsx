@@ -31,6 +31,7 @@ export const WeekMode = ({ week }: { week: dayjs.Dayjs[] }) => {
               day={day}
               localWeek={calendarState.current.week}
               localDay={j}
+              mode={"week"}
             />
           );
         })}

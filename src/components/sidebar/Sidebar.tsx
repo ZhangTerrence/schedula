@@ -9,7 +9,7 @@ export const Sidebar = () => {
   return (
     <div
       className={
-        "flex w-[25rem] flex-col items-center overflow-y-scroll border-r border-solid border-negative"
+        "flex w-[20%] flex-col items-center overflow-y-scroll border-r border-solid border-negative"
       }
     >
       <div className={"w-full p-4"}>

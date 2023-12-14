@@ -31,6 +31,7 @@ export const MonthMode = ({ month }: { month: dayjs.Dayjs[][] }) => {
                     day={day}
                     localWeek={i}
                     localDay={j}
+                    mode={"month"}
                   />
                 );
               })}

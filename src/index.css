@@ -5,6 +5,7 @@
 @layer base {
   :root {
     font-family: "Red Hat Display", sans-serif;
+    box-sizing: border-box;
   }
 
   html[data-theme="dark"] {

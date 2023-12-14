@@ -10,7 +10,7 @@ export const Navbar = ({ user }: { user: User }) => {
   return (
     <nav
       className={
-        "z-20 flex h-16 w-screen items-center justify-between border-b border-solid border-negative px-4"
+        "z-20 flex h-[7.5%] w-screen items-center justify-between border-b border-solid border-negative px-4"
       }
     >
       <div className={"flex items-center gap-x-2 text-2xl text-negative"}>
