@@ -1,14 +1,14 @@
 import { FormEvent, MouseEvent, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import type { Provider } from "@supabase/supabase-js";
-import supabase from "../config/supabase";
-import { Loading } from "../components/Loading";
 import { useSession } from "../hooks/useSession";
+import { Loading } from "../components/Loading";
 import {
   IoLogoGoogle,
   IoLogoGithub,
   IoCalendarClearSharp,
 } from "react-icons/io5";
+import supabase from "../config/supabase";
+import type { Provider } from "@supabase/supabase-js";
 
 export const Signin = () => {
   const [credentials, setCredentials] = useState({

@@ -1,8 +1,8 @@
 import { useState } from "react";
-import type { User } from "@supabase/supabase-js";
-import supabase from "../../config/supabase";
 import { IoCalendarClearSharp } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa6";
+import supabase from "../../config/supabase";
+import type { User } from "@supabase/supabase-js";
 
 export const Navbar = ({ user }: { user: User }) => {
   const [dropdown, setDropdown] = useState(false);

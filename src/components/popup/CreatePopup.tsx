@@ -1,25 +1,27 @@
-import dayjs from "dayjs";
 import { useRef, useState } from "react";
-import supabase from "../../config/supabase";
 import { useSession } from "../../hooks/useSession";
 import { useRedux } from "../../hooks/useRedux";
-import { Event, addEvent } from "../../store/eventsSlice";
-import { Task, addTask } from "../../store/tasksSlice";
+import { type Object, addTask } from "../../store/tasksSlice";
+import { addEvent } from "../../store/eventsSlice";
+import supabase from "../../config/supabase";
+import dayjs from "dayjs";
 
-export const Popup = ({
+export const CreatePopup = ({
   day,
   closePopup,
 }: {
   day: dayjs.Dayjs;
   closePopup: () => void;
 }) => {
-  const backdropRef = useRef<HTMLDivElement>(null);
-  const [mode, setMode] = useState<"events" | "tasks">("events");
-  const titleRef = useRef<HTMLInputElement>(null);
-  const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const { session } = useSession();
+
   const { useAppDispatch } = useRedux();
   const dispatch = useAppDispatch();
+
+  const [mode, setMode] = useState<"events" | "tasks">("events");
+  const backdropRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLInputElement>(null);
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
 
   const create = async () => {
     if (!titleRef.current) {
@@ -45,9 +47,9 @@ export const Popup = ({
         descriptionRef.current.value = "";
       }
       if (mode === "events") {
-        dispatch(addEvent(data[0] as Event));
+        dispatch(addEvent(data[0] as Object));
       } else {
-        dispatch(addTask(data[0] as Task));
+        dispatch(addTask(data[0] as Object));
       }
       closePopup();
     }

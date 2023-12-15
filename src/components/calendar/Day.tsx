@@ -1,11 +1,11 @@
-import { useRedux } from "../../hooks/useRedux";
-import dayjs from "dayjs";
-import { updateCalendar } from "../../store/calendarSlice";
-import { changeMode } from "../../store/modeSlice";
-import generateMonth from "../../utilities/generateMonth";
-import { Popup } from "../popup/Popup";
 import { useState, useRef } from "react";
-import { Object } from "../../store/tasksSlice";
+import { useRedux } from "../../hooks/useRedux";
+import { changeMode } from "../../store/modeSlice";
+import { updateCalendar } from "../../store/calendarSlice";
+import type { Object } from "../../store/tasksSlice";
+import { CreatePopup } from "../popup/CreatePopup";
+import dayjs from "dayjs";
+import generateMonth from "../../utilities/generateMonth";
 
 export const Day = ({
   day,
@@ -18,13 +18,14 @@ export const Day = ({
   localDay: number;
   mode: "month" | "week" | "day";
 }) => {
-  const [popup, setPopup] = useState(false);
   const { useAppSelector, useAppDispatch } = useRedux();
   const calendarState = useAppSelector((state) => state.calendar);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const eventsState = useAppSelector((state) => state.events.events);
   const tasksState = useAppSelector((state) => state.tasks.tasks);
+  const eventsState = useAppSelector((state) => state.events.events);
   const dispatch = useAppDispatch();
+
+  const [popup, setPopup] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const tasks = tasksState.filter((event) => {
     return (
@@ -235,7 +236,7 @@ export const Day = ({
           </div>
         )}
       </div>
-      {popup ? <Popup closePopup={closePopup} day={day} /> : null}
+      {popup ? <CreatePopup closePopup={closePopup} day={day} /> : null}
     </>
   );
 };

@@ -1,18 +1,18 @@
 import { useEffect, useCallback } from "react";
-import dayjs from "dayjs";
 import { useRedux } from "../../hooks/useRedux";
-import { updateCalendar } from "../../store/calendarSlice";
-import generateMonth from "../../utilities/generateMonth";
-import { MonthMode } from "./MonthMode";
-import { WeekMode } from "./WeekMode";
-import { DayMode } from "./DayMode";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 import { changeMode } from "../../store/modeSlice";
+import { updateCalendar } from "../../store/calendarSlice";
+import { DayMode } from "./DayMode";
+import { WeekMode } from "./WeekMode";
+import { MonthMode } from "./MonthMode";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
+import dayjs from "dayjs";
+import generateMonth from "../../utilities/generateMonth";
 
 export const Calendar = () => {
   const { useAppDispatch, useAppSelector } = useRedux();
-  const calendarState = useAppSelector((state) => state.calendar);
   const modeState = useAppSelector((state) => state.mode.mode);
+  const calendarState = useAppSelector((state) => state.calendar);
   const dispatch = useAppDispatch();
 
   useEffect(() => {

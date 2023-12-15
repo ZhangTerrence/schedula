@@ -1,16 +1,17 @@
+import { useEffect } from "react";
 import { Navigate } from "react-router-dom";
-import type { Session } from "@supabase/supabase-js";
+import { useRedux } from "../hooks/useRedux";
+import { type Object, addTask } from "../store/tasksSlice";
+import { addEvent } from "../store/eventsSlice";
 import { Navbar } from "../components/navigation/Navbar";
 import { Sidebar } from "../components/sidebar/Sidebar";
 import { Calendar } from "../components/calendar/Calendar";
-import { useEffect } from "react";
 import supabase from "../config/supabase";
-import { useRedux } from "../hooks/useRedux";
-import { Object, addTask } from "../store/tasksSlice";
-import { addEvent } from "../store/eventsSlice";
+import type { Session } from "@supabase/supabase-js";
 
 export const Home = ({ session }: { session: Session | null }) => {
   if (!session) return <Navigate to={"/signin"} />;
+
   const { useAppDispatch } = useRedux();
   const dispatch = useAppDispatch();
 

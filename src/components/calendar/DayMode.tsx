@@ -1,5 +1,5 @@
-import dayjs from "dayjs";
 import { Day } from "./Day";
+import dayjs from "dayjs";
 
 export const DayMode = ({
   day,

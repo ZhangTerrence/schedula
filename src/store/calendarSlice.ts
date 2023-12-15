@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import generateMonth from "../utilities/generateMonth";
 import dayjs from "dayjs";
+import generateMonth from "../utilities/generateMonth";
 
 export type CalendarState = {
   array: dayjs.Dayjs[][];

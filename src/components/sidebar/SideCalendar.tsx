@@ -1,18 +1,19 @@
-import { Fragment, useState, useEffect } from "react";
-import { type CalendarState, updateCalendar } from "../../store/calendarSlice";
-import generateMonth from "../../utilities/generateMonth";
-import dayjs from "dayjs";
+import { useState, useEffect, Fragment } from "react";
 import { useRedux } from "../../hooks/useRedux";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 import { changeMode } from "../../store/modeSlice";
+import { type CalendarState, updateCalendar } from "../../store/calendarSlice";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
+import dayjs from "dayjs";
+import generateMonth from "../../utilities/generateMonth";
 
 export const SideCalendar = () => {
   const { useAppDispatch, useAppSelector } = useRedux();
   const calendarState = useAppSelector((state) => state.calendar);
+  const dispatch = useAppDispatch();
+
   const [sideCalendar, setSideCalendar] =
     useState<CalendarState>(calendarState);
   const [selectedDay, setSelectedDay] = useState(dayjs().format("DD-MM-YY"));
-  const dispatch = useAppDispatch();
 
   useEffect(() => {
     setSideCalendar(calendarState);
@@ -105,6 +106,7 @@ export const SideCalendar = () => {
     }
 
     const month = sideCalendar.current.month;
+
     setSelectedDay(day.format("DD-MM-YY"));
     setSideCalendar((calendar) => {
       return {
@@ -118,7 +120,7 @@ export const SideCalendar = () => {
     });
     dispatch(
       updateCalendar({
-        ...calendarState,
+        array: sideCalendar.array,
         current: {
           month,
           week: i,
@@ -147,6 +149,8 @@ export const SideCalendar = () => {
                   current: {
                     ...calendar.current,
                     month,
+                    week: 0,
+                    day: 0,
                   },
                 };
               })
@@ -170,6 +174,8 @@ export const SideCalendar = () => {
                   current: {
                     ...calendar.current,
                     month,
+                    week: 0,
+                    day: 0,
                   },
                 };
               })
