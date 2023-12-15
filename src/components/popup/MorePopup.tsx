@@ -38,41 +38,16 @@ export const MorePopup = ({
     >
       <form
         className={
-          "absolute inset-0 m-auto flex h-fit max-h-[30rem] w-[25rem] flex-col overflow-y-scroll rounded-md border border-solid border-negative bg-primary p-4"
+          "absolute inset-0 m-auto flex h-fit max-h-[30rem] w-[25rem] flex-col gap-y-4 overflow-y-scroll rounded-md border border-solid border-negative bg-primary p-4"
         }
       >
         <h1 className={"text-3xl text-negative underline"}>
           {dayjs(day).format("MMMM DD, YYYY")}
         </h1>
-        {currentTasks.map((task, i) => {
-          return (
-            <button
-              className={
-                "border-b border-solid border-negative py-4 text-start"
-              }
-              key={i}
-              onClick={(e) => {
-                e.preventDefault();
-                closePopup();
-                selectInfo(task);
-              }}
-            >
-              <div
-                className={
-                  "overflow-hidden text-ellipsis break-words text-negative"
-                }
-              >
-                {task.title}
-              </div>
-            </button>
-          );
-        })}
         {currentEvents.map((event, j) => {
           return (
             <button
-              className={
-                "border-b border-solid border-negative py-4 text-start"
-              }
+              className={`rounded-md bg-teal-800 p-2 text-start`}
               key={j}
               onClick={(e) => {
                 e.preventDefault();
@@ -86,6 +61,29 @@ export const MorePopup = ({
                 }
               >
                 {event.title}
+              </div>
+            </button>
+          );
+        })}
+        {currentTasks.map((task, i) => {
+          return (
+            <button
+              className={`${
+                task.completed ? "bg-blue-950" : "bg-blue-700"
+              } rounded-md p-2 text-start`}
+              key={i}
+              onClick={(e) => {
+                e.preventDefault();
+                closePopup();
+                selectInfo(task);
+              }}
+            >
+              <div
+                className={
+                  "overflow-hidden text-ellipsis break-words text-negative"
+                }
+              >
+                {task.title}
               </div>
             </button>
           );

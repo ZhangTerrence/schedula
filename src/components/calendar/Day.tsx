@@ -48,11 +48,11 @@ export const Day = ({
 
   let displayedTasks: Task[] = [];
   let displayedEvents: Event[] = [];
-  if (amountTasks === 2) {
-    displayedTasks = tasks.slice(0, 2);
-  } else if (amountTasks < 2) {
-    displayedTasks = tasks.slice(0, amountTasks);
-    displayedEvents = events.slice(0, 2 - amountTasks);
+  if (amountEvents >= 2) {
+    displayedEvents = events.slice(0, 2);
+  } else if (amountEvents < 2) {
+    displayedEvents = events.slice(0, amountEvents);
+    displayedTasks = tasks.slice(0, 2 - amountEvents);
   }
 
   const closePopup = () => {
@@ -165,7 +165,7 @@ export const Day = ({
       {renderPopup()}
       <div
         className={
-          "flex flex-col items-center gap-y-2 border border-solid border-secondary p-2"
+          "flex min-h-full flex-col items-center gap-y-2 border border-solid border-secondary p-2"
         }
         onClick={(e) => {
           if (e.currentTarget === e.target) {
@@ -201,29 +201,12 @@ export const Day = ({
               }
             }}
           >
-            {displayedTasks.map((task, i) => {
-              return (
-                <button
-                  key={i}
-                  className={`${
-                    task.completed ? "bg-pink-200" : ""
-                  } overflow-hidden text-ellipsis whitespace-nowrap rounded-full border border-solid border-negative px-4 py-1 text-start text-sm text-negative`}
-                  onClick={() => {
-                    setSelectedInfo(task);
-
-                    setPopup("info");
-                  }}
-                >
-                  {task.title}
-                </button>
-              );
-            })}
             {displayedEvents.map((event, i) => {
               return (
                 <button
                   key={i}
                   className={
-                    "overflow-hidden text-ellipsis whitespace-nowrap rounded-full border border-solid border-negative px-4 py-1 text-start text-sm text-negative"
+                    "overflow-hidden text-ellipsis whitespace-nowrap rounded-full bg-teal-800 px-4 py-1 text-start text-sm text-negative"
                   }
                   onClick={() => {
                     setSelectedInfo(event);
@@ -235,10 +218,28 @@ export const Day = ({
                 </button>
               );
             })}
+            {displayedTasks.map((task, i) => {
+              return (
+                <button
+                  key={i}
+                  className={`${
+                    task.completed ? "bg-blue-950" : "bg-blue-700"
+                  } overflow-hidden text-ellipsis whitespace-nowrap rounded-full px-4 py-1 text-start text-sm text-negative`}
+                  onClick={() => {
+                    setSelectedInfo(task);
+
+                    setPopup("info");
+                  }}
+                >
+                  {task.title}
+                </button>
+              );
+            })}
+
             {amountEvents + amountTasks > 2 ? (
               <button
                 className={
-                  "w-full overflow-hidden text-ellipsis rounded-full border border-solid border-negative px-4 py-1 text-sm text-negative"
+                  "w-full overflow-hidden text-ellipsis rounded-full px-4 py-1 text-sm text-negative hover:bg-secondary"
                 }
                 onClick={() => setPopup("more")}
               >
@@ -248,42 +249,17 @@ export const Day = ({
           </div>
         ) : (
           <div
-            className={"flex w-full grow flex-col overflow-scroll px-3"}
+            className={"flex w-full grow flex-col gap-y-4 overflow-scroll px-1"}
             onClick={(e) => {
               if (e.currentTarget === e.target) {
                 setPopup("create");
               }
             }}
           >
-            {tasks.map((task, i) => {
-              return (
-                <button
-                  className={
-                    "border-b border-solid border-negative py-4 text-start"
-                  }
-                  key={i}
-                  onClick={() => {
-                    setSelectedInfo(task);
-                    setPopup("info");
-                  }}
-                >
-                  <div
-                    className={"overflow-hidden text-ellipsis text-negative"}
-                  >
-                    {task.title}
-                  </div>
-                  <div className={"line-clamp-4 break-words text-negative"}>
-                    {task.description}
-                  </div>
-                </button>
-              );
-            })}
             {events.map((event, j) => {
               return (
                 <button
-                  className={
-                    "border-b border-solid border-negative py-4 text-start"
-                  }
+                  className={"rounded-md bg-teal-800 p-2 py-4 text-start"}
                   key={j}
                   onClick={() => {
                     setSelectedInfo(event);
@@ -291,12 +267,39 @@ export const Day = ({
                   }}
                 >
                   <div
-                    className={"overflow-hidden text-ellipsis text-negative"}
+                    className={
+                      "overflow-hidden text-ellipsis text-negative underline"
+                    }
                   >
                     {event.title}
                   </div>
                   <div className={"line-clamp-4 break-words text-negative"}>
                     {event.description}
+                  </div>
+                </button>
+              );
+            })}
+            {tasks.map((task, i) => {
+              return (
+                <button
+                  className={`${
+                    task.completed ? "bg-blue-950" : "bg-blue-700"
+                  } rounded-md p-2 text-start`}
+                  key={i}
+                  onClick={() => {
+                    setSelectedInfo(task);
+                    setPopup("info");
+                  }}
+                >
+                  <div
+                    className={
+                      "overflow-hidden text-ellipsis text-negative underline"
+                    }
+                  >
+                    {task.title}
+                  </div>
+                  <div className={"line-clamp-4 break-words text-negative"}>
+                    {task.description}
                   </div>
                 </button>
               );

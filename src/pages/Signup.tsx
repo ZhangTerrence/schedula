@@ -14,6 +14,17 @@ export const Signup = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const getURL = () => {
+    let url =
+      import.meta.env.NEXT_PUBLIC_SITE_URL ??
+      import.meta.env.NEXT_PUBLIC_VERCEL_URL ??
+      "http://localhost:3000/";
+
+    url = url.includes("http") ? url : `https://${url}`;
+    url = url.charAt(url.length - 1) === "/" ? url : `${url}/`;
+    return url;
+  };
+
   const handleCredentialSignup = async (e: FormEvent | MouseEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -48,7 +59,7 @@ export const Signup = () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: "/",
+        redirectTo: getURL(),
       },
     });
 

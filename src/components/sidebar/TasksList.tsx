@@ -15,7 +15,7 @@ export const TasksList = () => {
       }
     >
       <h1 className={"text-center text-xl text-negative underline"}>Tasks</h1>
-      <div className={"flex w-full grow flex-col overflow-scroll px-3"}>
+      <div className={"flex w-full grow flex-col gap-y-4 overflow-scroll"}>
         {tasksState.map((task, i) => {
           if (new Date(task.date).getDate() < new Date().getDate() - 1) {
             return null;
@@ -66,9 +66,9 @@ export const TasksList = () => {
               }}
             >
               <button
-                className={
-                  "w-full border-b border-solid border-negative py-4 text-start"
-                }
+                className={`${
+                  task.completed ? "bg-blue-950" : "bg-blue-700"
+                } w-full rounded-md p-2 text-start`}
                 onClick={() => {}}
               >
                 <div

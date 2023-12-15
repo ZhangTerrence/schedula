@@ -19,6 +19,17 @@ export const Signin = () => {
   const navigate = useNavigate();
   const { session } = useSession();
 
+  const getURL = () => {
+    let url =
+      import.meta.env.NEXT_PUBLIC_SITE_URL ??
+      import.meta.env.NEXT_PUBLIC_VERCEL_URL ??
+      "http://localhost:3000/";
+
+    url = url.includes("http") ? url : `https://${url}`;
+    url = url.charAt(url.length - 1) === "/" ? url : `${url}/`;
+    return url;
+  };
+
   const handleCredentialSignin = async (e: FormEvent | MouseEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -45,6 +56,9 @@ export const Signin = () => {
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
+      options: {
+        redirectTo: getURL(),
+      },
     });
 
     if (error) {

@@ -7,24 +7,25 @@ export const EventsList = () => {
   return (
     <div className={"flex w-full flex-col items-center gap-y-4 pb-4"}>
       <h1 className={"text-center text-xl text-negative underline"}>Events</h1>
-      <div className={"flex w-full grow flex-col overflow-scroll px-3"}>
+      <div className={"flex w-full grow flex-col gap-y-4 overflow-scroll"}>
         {eventsState.map((event, j) => {
+          if (new Date(event.date).getDate() < new Date().getDate() - 1) {
+            return null;
+          }
+
           return (
-            <>
+            <div className={"rounded-md bg-teal-800 p-2 text-start"} key={j}>
               <div
                 className={
-                  "border-b border-solid border-negative py-4 text-start"
+                  "overflow-hidden text-ellipsis text-negative underline"
                 }
-                key={j}
               >
-                <div className={"overflow-hidden text-ellipsis text-negative"}>
-                  {event.title}
-                </div>
-                <div className={"line-clamp-4 break-words text-negative"}>
-                  {event.description}
-                </div>
+                {event.title}
               </div>
-            </>
+              <div className={"line-clamp-4 break-words text-negative"}>
+                {event.description}
+              </div>
+            </div>
           );
         })}
       </div>
