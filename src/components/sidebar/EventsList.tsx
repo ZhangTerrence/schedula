@@ -7,7 +7,7 @@ export const EventsList = () => {
   return (
     <div className={"flex w-full flex-col items-center gap-y-4 pb-4"}>
       <h1 className={"text-center text-xl text-negative underline"}>Events</h1>
-      <div className={"flex w-full grow flex-col gap-y-4 overflow-scroll"}>
+      <div className={"flex w-full grow flex-col gap-y-4"}>
         {eventsState.map((event, j) => {
           if (new Date(event.date).getDate() < new Date().getDate() - 1) {
             return null;

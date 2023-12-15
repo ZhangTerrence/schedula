@@ -462,7 +462,7 @@ export const Calendar = () => {
           </button>
         </div>
       </header>
-      <div className={"flex h-full max-h-full flex-col overflow-scroll"}>
+      <div className={"flex h-full max-h-full flex-col overflow-y-scroll"}>
         {renderMode()}
       </div>
     </div>

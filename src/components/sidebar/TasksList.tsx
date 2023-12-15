@@ -15,7 +15,7 @@ export const TasksList = () => {
       }
     >
       <h1 className={"text-center text-xl text-negative underline"}>Tasks</h1>
-      <div className={"flex w-full grow flex-col gap-y-4 overflow-scroll"}>
+      <div className={"flex w-full grow flex-col gap-y-4"}>
         {tasksState.map((task, i) => {
           if (new Date(task.date).getDate() < new Date().getDate() - 1) {
             return null;

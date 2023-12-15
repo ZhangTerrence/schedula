@@ -249,7 +249,9 @@ export const Day = ({
           </div>
         ) : (
           <div
-            className={"flex w-full grow flex-col gap-y-4 overflow-scroll px-1"}
+            className={
+              "flex w-full grow flex-col gap-y-4 overflow-y-scroll px-1"
+            }
             onClick={(e) => {
               if (e.currentTarget === e.target) {
                 setPopup("create");
