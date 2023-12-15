@@ -1,11 +1,15 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { useRedux } from "../../hooks/useRedux";
 import { changeMode } from "../../store/modeSlice";
 import { updateCalendar } from "../../store/calendarSlice";
 import type { Object } from "../../store/tasksSlice";
 import { CreatePopup } from "../popup/CreatePopup";
+import { MorePopup } from "../popup/MorePopup";
+import { InfoPopup } from "../popup/InfoPopup";
 import dayjs from "dayjs";
 import generateMonth from "../../utilities/generateMonth";
+
+type PopupTypes = "create" | "more" | "info" | null;
 
 export const Day = ({
   day,
@@ -24,8 +28,8 @@ export const Day = ({
   const eventsState = useAppSelector((state) => state.events.events);
   const dispatch = useAppDispatch();
 
-  const [popup, setPopup] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [popup, setPopup] = useState<PopupTypes>(null);
+  const [selectedInfo, setSelectedInfo] = useState<Object | null>(null);
 
   const tasks = tasksState.filter((event) => {
     return (
@@ -49,6 +53,31 @@ export const Day = ({
       .slice(0, amountTasks)
       .concat(events.slice(0, 2 - amountTasks));
   }
+
+  const closePopup = () => {
+    setPopup(null);
+  };
+
+  const selectInfo = (info: Object) => {
+    setSelectedInfo(info);
+    setPopup("info");
+  };
+
+  const renderPopup = () => {
+    if (!popup) {
+      return null;
+    }
+
+    if (popup === "create") {
+      return <CreatePopup day={day} closePopup={closePopup} />;
+    } else if (popup === "more") {
+      return (
+        <MorePopup day={day} selectInfo={selectInfo} closePopup={closePopup} />
+      );
+    } else if (popup === "info") {
+      return <InfoPopup info={selectedInfo} closePopup={closePopup} />;
+    }
+  };
 
   const isSelectedDay = (day: dayjs.Dayjs) => {
     return (
@@ -130,17 +159,18 @@ export const Day = ({
     );
   };
 
-  const closePopup = () => {
-    setPopup(false);
-  };
-
   return (
     <>
+      {renderPopup()}
       <div
         className={
           "flex flex-col items-center gap-y-2 border border-solid border-secondary p-2"
         }
-        onClick={() => setPopup(true)}
+        onClick={(e) => {
+          if (e.currentTarget === e.target) {
+            setPopup("create");
+          }
+        }}
       >
         {mode !== "day" ? (
           <button
@@ -163,19 +193,27 @@ export const Day = ({
         ) : null}
         {mode === "month" ? (
           <div
-            className={"flex w-full grow flex-col gap-y-1"}
-            ref={containerRef}
+            className={"flex w-full grow flex-col gap-y-1.5"}
+            onClick={(e) => {
+              if (e.currentTarget === e.target) {
+                setPopup("create");
+              }
+            }}
           >
             {display.map((object, i) => {
               return (
-                <div
+                <button
                   key={i}
                   className={
-                    "overflow-hidden text-ellipsis rounded-full border border-solid border-negative px-4 py-1 text-sm text-negative"
+                    "overflow-hidden text-ellipsis rounded-full border border-solid border-negative px-4 py-1 text-start text-sm text-negative"
                   }
+                  onClick={() => {
+                    setSelectedInfo(object);
+                    setPopup("info");
+                  }}
                 >
                   {object.title}
-                </div>
+                </button>
               );
             })}
             {amountEvents + amountTasks > 2 ? (
@@ -183,7 +221,7 @@ export const Day = ({
                 className={
                   "w-full overflow-hidden text-ellipsis rounded-full border border-solid border-negative px-4 py-1 text-sm text-negative"
                 }
-                onClick={() => console.log("a")}
+                onClick={() => setPopup("more")}
               >
                 {amountEvents + amountTasks - 2} more
               </button>
@@ -191,52 +229,62 @@ export const Day = ({
           </div>
         ) : (
           <div
-            className={
-              "flex w-full grow flex-col gap-y-px overflow-scroll px-3"
-            }
+            className={"flex w-full grow flex-col overflow-scroll px-3"}
+            onClick={(e) => {
+              if (e.currentTarget === e.target) {
+                setPopup("create");
+              }
+            }}
           >
             {tasks.map((task, i) => {
               return (
-                <div
-                  className={"border-b border-solid border-negative py-4"}
+                <button
+                  className={
+                    "border-b border-solid border-negative py-4 text-start"
+                  }
                   key={i}
+                  onClick={() => {
+                    setSelectedInfo(task);
+                    setPopup("info");
+                  }}
                 >
                   <div
-                    className={
-                      "overflow-hidden text-ellipsis break-words text-negative"
-                    }
+                    className={"overflow-hidden text-ellipsis text-negative"}
                   >
                     {task.title}
                   </div>
                   <div className={"line-clamp-4 break-words text-negative"}>
                     {task.description}
                   </div>
-                </div>
+                </button>
               );
             })}
             {events.map((event, j) => {
               return (
-                <div
-                  className={"border-b border-solid border-negative py-4"}
+                <button
+                  className={
+                    "border-b border-solid border-negative py-4 text-start"
+                  }
                   key={j}
+                  onClick={() => {
+                    setSelectedInfo(event);
+                    setPopup("info");
+                  }}
                 >
                   <div
-                    className={
-                      "overflow-hidden text-ellipsis break-words text-negative"
-                    }
+                    className={"overflow-hidden text-ellipsis text-negative"}
                   >
                     {event.title}
                   </div>
                   <div className={"line-clamp-4 break-words text-negative"}>
                     {event.description}
                   </div>
-                </div>
+                </button>
               );
             })}
           </div>
         )}
       </div>
-      {popup ? <CreatePopup closePopup={closePopup} day={day} /> : null}
     </>
   );
 };

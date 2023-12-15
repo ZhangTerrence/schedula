@@ -340,7 +340,11 @@ export const Calendar = () => {
   };
 
   return (
-    <div className={"flex h-full max-h-full w-4/5 max-w-[80%] flex-col"}>
+    <div
+      className={
+        "flex h-full max-h-full w-4/5 max-w-[80%] flex-col overflow-x-hidden"
+      }
+    >
       <header
         className={
           "flex h-fit w-full items-center justify-between border-b border-solid border-negative p-4"

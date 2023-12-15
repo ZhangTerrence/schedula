@@ -70,7 +70,7 @@ export const CreatePopup = ({
           "absolute inset-0 m-auto flex h-fit w-fit flex-col gap-y-4 rounded-md border border-solid border-negative bg-primary p-4"
         }
       >
-        <h1 className={"text-3xl text-negative"}>
+        <h1 className={"text-3xl text-negative underline"}>
           {dayjs(day).format("MMMM DD, YYYY")}
         </h1>
         <input
