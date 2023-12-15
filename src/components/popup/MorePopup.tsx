@@ -9,7 +9,7 @@ export const MorePopup = ({
   closePopup,
 }: {
   day: dayjs.Dayjs;
-  selectInfo: (info: Object) => void;
+  selectInfo: (info: Object, type: "tasks" | "events") => void;
   closePopup: () => void;
 }) => {
   const { useAppSelector } = useRedux();
@@ -17,6 +17,13 @@ export const MorePopup = ({
   const eventsState = useAppSelector((state) => state.events.events);
 
   const backdropRef = useRef<HTMLDivElement>(null);
+
+  const currentTasks = tasksState.filter(
+    (tasks) => tasks.date === day.format("YYYY-MM-DD"),
+  );
+  const currentEvents = eventsState.filter(
+    (events) => events.date === day.format("YYYY-MM-DD"),
+  );
 
   return (
     <div
@@ -36,7 +43,7 @@ export const MorePopup = ({
         <h1 className={"text-3xl text-negative underline"}>
           {dayjs(day).format("MMMM DD, YYYY")}
         </h1>
-        {tasksState.map((task, i) => {
+        {currentTasks.map((task, i) => {
           return (
             <button
               className={
@@ -46,7 +53,7 @@ export const MorePopup = ({
               onClick={(e) => {
                 e.preventDefault();
                 closePopup();
-                selectInfo(task);
+                selectInfo(task, "tasks");
               }}
             >
               <div
@@ -59,7 +66,7 @@ export const MorePopup = ({
             </button>
           );
         })}
-        {eventsState.map((event, j) => {
+        {currentEvents.map((event, j) => {
           return (
             <button
               className={
@@ -69,7 +76,7 @@ export const MorePopup = ({
               onClick={(e) => {
                 e.preventDefault();
                 closePopup();
-                selectInfo(event);
+                selectInfo(event, "events");
               }}
             >
               <div

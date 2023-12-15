@@ -18,19 +18,19 @@ export const CreatePopup = ({
   const { useAppDispatch } = useRedux();
   const dispatch = useAppDispatch();
 
-  const [mode, setMode] = useState<"events" | "tasks">("events");
+  const [infoType, setInfoType] = useState<"events" | "tasks">("events");
   const backdropRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
 
-  const create = async () => {
+  const createInfo = async () => {
     if (!titleRef.current) {
       window.alert("Title is required.");
       return;
     }
 
     const { data, error } = await supabase
-      .from(`${mode}`)
+      .from(`${infoType}`)
       .insert({
         user_id: session?.user.id,
         title: titleRef.current.value,
@@ -40,13 +40,13 @@ export const CreatePopup = ({
       .select();
 
     if (error) {
-      alert(error.message);
+      window.alert(error.message);
     } else {
       titleRef.current.value = "";
       if (descriptionRef.current) {
         descriptionRef.current.value = "";
       }
-      if (mode === "events") {
+      if (infoType === "events") {
         dispatch(addEvent(data[0] as Object));
       } else {
         dispatch(addTask(data[0] as Object));
@@ -84,26 +84,26 @@ export const CreatePopup = ({
         <div className={"flex w-fit justify-between space-x-2 rounded-md p-1"}>
           <button
             className={`${
-              mode === "events"
+              infoType === "events"
                 ? "bg-negative text-primary"
                 : "bg-secondary text-negative"
             } rounded-md px-4 py-2 text-lg font-semibold`}
             onClick={(e) => {
               e.preventDefault();
-              setMode("events");
+              setInfoType("events");
             }}
           >
             Event
           </button>
           <button
             className={`${
-              mode === "tasks"
+              infoType === "tasks"
                 ? "bg-negative text-primary"
                 : "bg-secondary text-negative"
             } rounded-md px-4 py-2 text-lg font-semibold`}
             onClick={(e) => {
               e.preventDefault();
-              setMode("tasks");
+              setInfoType("tasks");
             }}
           >
             Task
@@ -131,7 +131,7 @@ export const CreatePopup = ({
             }
             onClick={(e) => {
               e.preventDefault();
-              create();
+              createInfo();
             }}
           >
             Confirm

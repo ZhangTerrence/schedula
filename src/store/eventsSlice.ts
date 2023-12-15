@@ -17,9 +17,20 @@ export const eventsSlice = createSlice({
     addEvent: (state, action: PayloadAction<Object>) => {
       state.events.push(action.payload);
     },
+    updateEvent: (state, action: PayloadAction<Object>) => {
+      const index = state.events.findIndex(
+        (event) => event.id === action.payload.id,
+      );
+      state.events[index] = action.payload;
+    },
+    deleteEvent: (state, action: PayloadAction<Object>) => {
+      state.events = state.events.filter((event) => {
+        return event.id !== action.payload.id;
+      });
+    },
   },
 });
 
-export const { addEvent } = eventsSlice.actions;
+export const { addEvent, updateEvent, deleteEvent } = eventsSlice.actions;
 
 export default eventsSlice.reducer;
