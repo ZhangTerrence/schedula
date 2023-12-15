@@ -2,23 +2,26 @@ import { useState, useRef } from "react";
 import { useSession } from "../../hooks/useSession";
 import { useRedux } from "../../hooks/useRedux";
 import {
-  type Object,
+  type Task,
   addTask,
   updateTask,
   deleteTask,
 } from "../../store/tasksSlice";
-import { addEvent, updateEvent, deleteEvent } from "../../store/eventsSlice";
+import {
+  type Event,
+  addEvent,
+  updateEvent,
+  deleteEvent,
+} from "../../store/eventsSlice";
 import { IoPencilSharp, IoTrashBinSharp } from "react-icons/io5";
 import supabase from "../../config/supabase";
 import dayjs from "dayjs";
 
 export const InfoPopup = ({
   info,
-  type,
   closePopup,
 }: {
-  info: Object | null;
-  type: "tasks" | "events" | null;
+  info: Task | Event | null;
   closePopup: () => void;
 }) => {
   const { session } = useSession();
@@ -27,7 +30,7 @@ export const InfoPopup = ({
   const dispatch = useAppDispatch();
 
   const [editing, setEditing] = useState(false);
-  const [infoType, setInfoType] = useState(type);
+
   const backdropRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
@@ -35,6 +38,13 @@ export const InfoPopup = ({
   if (!info) {
     return null;
   }
+
+  let type = "events";
+  if ((info as Task).completed !== undefined) {
+    type = "tasks";
+  }
+
+  const [infoType, setInfoType] = useState(type);
 
   const deleteInfo = async () => {
     if (!type) {
@@ -47,20 +57,15 @@ export const InfoPopup = ({
       window.alert(error.message);
     } else {
       if (type === "tasks") {
-        dispatch(deleteTask(info));
+        dispatch(deleteTask(info as Task));
       } else {
-        dispatch(deleteEvent(info));
+        dispatch(deleteEvent(info as Event));
       }
       closePopup();
     }
   };
 
   const updateInfo = async () => {
-    if (!type) {
-      window.alert("Error.");
-      return;
-    }
-
     if (!titleRef.current) {
       window.alert("Title is required.");
       return;
@@ -84,11 +89,11 @@ export const InfoPopup = ({
         }
 
         if (infoType === "tasks") {
-          dispatch(deleteEvent(info));
-          dispatch(addTask(data[0] as Object));
+          dispatch(deleteEvent(info as Event));
+          dispatch(addTask(data[0] as Task));
         } else {
-          dispatch(deleteTask(info));
-          dispatch(addEvent(data[0] as Object));
+          dispatch(deleteTask(info as Task));
+          dispatch(addEvent(data[0] as Event));
         }
       } catch (error) {
         window.alert(error);
@@ -109,14 +114,50 @@ export const InfoPopup = ({
         window.alert(error);
       } else {
         if (infoType === "tasks") {
-          dispatch(updateTask(data[0] as Object));
+          dispatch(updateTask(data[0] as Task));
         } else {
-          dispatch(updateEvent(data[0] as Object));
+          dispatch(updateEvent(data[0] as Event));
         }
       }
     }
 
     setEditing(false);
+    closePopup();
+  };
+
+  const markCompleted = async () => {
+    const { data, error } = await supabase
+      .from("tasks")
+      .update({
+        completed: true,
+      })
+      .eq("id", info.id)
+      .select();
+
+    if (error) {
+      window.alert(error);
+    } else {
+      dispatch(updateTask(data[0] as Task));
+    }
+
+    closePopup();
+  };
+
+  const markUncompleted = async () => {
+    const { data, error } = await supabase
+      .from("tasks")
+      .update({
+        completed: false,
+      })
+      .eq("id", info.id)
+      .select();
+
+    if (error) {
+      window.alert(error);
+    } else {
+      dispatch(updateTask(data[0] as Task));
+    }
+
     closePopup();
   };
 
@@ -236,6 +277,33 @@ export const InfoPopup = ({
                 onClick={() => deleteInfo()}
               />
             </div>
+            {type === "tasks" ? (
+              (info as Task).completed ? (
+                <button
+                  className={
+                    "self-end rounded-md border border-solid border-negative px-2 py-1 text-negative"
+                  }
+                  onClick={(e) => {
+                    e.preventDefault();
+                    markUncompleted();
+                  }}
+                >
+                  Mark as uncompleted
+                </button>
+              ) : (
+                <button
+                  className={
+                    "self-end rounded-md border border-solid border-negative px-2 py-1 text-negative"
+                  }
+                  onClick={(e) => {
+                    e.preventDefault();
+                    markCompleted();
+                  }}
+                >
+                  Mark as completed
+                </button>
+              )
+            ) : null}
           </>
         )}
       </form>

@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useRedux } from "../../hooks/useRedux";
 import { changeMode } from "../../store/modeSlice";
 import { updateCalendar } from "../../store/calendarSlice";
-import type { Object } from "../../store/tasksSlice";
+import type { Task } from "../../store/tasksSlice";
+import type { Event } from "../../store/eventsSlice";
 import { CreatePopup } from "../popup/CreatePopup";
 import { MorePopup } from "../popup/MorePopup";
 import { InfoPopup } from "../popup/InfoPopup";
@@ -29,10 +30,7 @@ export const Day = ({
   const dispatch = useAppDispatch();
 
   const [popup, setPopup] = useState<PopupTypes>(null);
-  const [selectedInfo, setSelectedInfo] = useState<Object | null>(null);
-  const [selectedInfoType, setSelectedInfoType] = useState<
-    "tasks" | "events" | null
-  >(null);
+  const [selectedInfo, setSelectedInfo] = useState<Task | Event | null>(null);
 
   const tasks = tasksState.filter((event) => {
     return (
@@ -48,22 +46,21 @@ export const Day = ({
   });
   const amountEvents = events.length;
 
-  let display: Object[] = [];
+  let displayedTasks: Task[] = [];
+  let displayedEvents: Event[] = [];
   if (amountTasks === 2) {
-    display = tasks.slice(0, 2);
+    displayedTasks = tasks.slice(0, 2);
   } else if (amountTasks < 2) {
-    display = tasks
-      .slice(0, amountTasks)
-      .concat(events.slice(0, 2 - amountTasks));
+    displayedTasks = tasks.slice(0, amountTasks);
+    displayedEvents = events.slice(0, 2 - amountTasks);
   }
 
   const closePopup = () => {
     setPopup(null);
   };
 
-  const selectInfo = (info: Object, type: "tasks" | "events") => {
+  const selectInfo = (info: Task | Event) => {
     setSelectedInfo(info);
-    setSelectedInfoType(type);
     setPopup("info");
   };
 
@@ -79,13 +76,7 @@ export const Day = ({
         <MorePopup day={day} selectInfo={selectInfo} closePopup={closePopup} />
       );
     } else if (popup === "info") {
-      return (
-        <InfoPopup
-          info={selectedInfo}
-          type={selectedInfoType}
-          closePopup={closePopup}
-        />
-      );
+      return <InfoPopup info={selectedInfo} closePopup={closePopup} />;
     }
   };
 
@@ -210,7 +201,24 @@ export const Day = ({
               }
             }}
           >
-            {display.map((object, i) => {
+            {displayedTasks.map((task, i) => {
+              return (
+                <button
+                  key={i}
+                  className={`${
+                    task.completed ? "bg-pink-200" : ""
+                  } overflow-hidden text-ellipsis whitespace-nowrap rounded-full border border-solid border-negative px-4 py-1 text-start text-sm text-negative`}
+                  onClick={() => {
+                    setSelectedInfo(task);
+
+                    setPopup("info");
+                  }}
+                >
+                  {task.title}
+                </button>
+              );
+            })}
+            {displayedEvents.map((event, i) => {
               return (
                 <button
                   key={i}
@@ -218,16 +226,12 @@ export const Day = ({
                     "overflow-hidden text-ellipsis whitespace-nowrap rounded-full border border-solid border-negative px-4 py-1 text-start text-sm text-negative"
                   }
                   onClick={() => {
-                    setSelectedInfo(object);
-                    if (i < amountTasks) {
-                      setSelectedInfoType("tasks");
-                    } else {
-                      setSelectedInfoType("events");
-                    }
+                    setSelectedInfo(event);
+
                     setPopup("info");
                   }}
                 >
-                  {object.title}
+                  {event.title}
                 </button>
               );
             })}
@@ -260,7 +264,6 @@ export const Day = ({
                   key={i}
                   onClick={() => {
                     setSelectedInfo(task);
-                    setSelectedInfoType("tasks");
                     setPopup("info");
                   }}
                 >
@@ -284,7 +287,6 @@ export const Day = ({
                   key={j}
                   onClick={() => {
                     setSelectedInfo(event);
-                    setSelectedInfoType("events");
                     setPopup("info");
                   }}
                 >

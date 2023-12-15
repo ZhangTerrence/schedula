@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { useRedux } from "../hooks/useRedux";
-import { type Object, addTask } from "../store/tasksSlice";
-import { addEvent } from "../store/eventsSlice";
+import { type Task, addTask } from "../store/tasksSlice";
+import { type Event, addEvent } from "../store/eventsSlice";
 import { Navbar } from "../components/navigation/Navbar";
 import { Sidebar } from "../components/sidebar/Sidebar";
 import { Calendar } from "../components/calendar/Calendar";
@@ -26,7 +26,7 @@ export const Home = ({ session }: { session: Session | null }) => {
         alert(error.message);
       } else {
         for (const event of data) {
-          dispatch(addEvent(event as Object));
+          dispatch(addEvent(event as Event));
         }
       }
     }
@@ -43,7 +43,7 @@ export const Home = ({ session }: { session: Session | null }) => {
         alert(error.message);
       } else {
         for (const task of data) {
-          dispatch(addTask(task as Object));
+          dispatch(addTask(task as Task));
         }
       }
     }

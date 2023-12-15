@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
 import { useSession } from "../../hooks/useSession";
 import { useRedux } from "../../hooks/useRedux";
-import { type Object, addTask } from "../../store/tasksSlice";
-import { addEvent } from "../../store/eventsSlice";
+import { type Task, addTask } from "../../store/tasksSlice";
+import { type Event, addEvent } from "../../store/eventsSlice";
 import supabase from "../../config/supabase";
 import dayjs from "dayjs";
 
@@ -46,10 +46,10 @@ export const CreatePopup = ({
       if (descriptionRef.current) {
         descriptionRef.current.value = "";
       }
-      if (infoType === "events") {
-        dispatch(addEvent(data[0] as Object));
+      if (infoType === "tasks") {
+        dispatch(addTask(data[0] as Task));
       } else {
-        dispatch(addTask(data[0] as Object));
+        dispatch(addEvent(data[0] as Event));
       }
       closePopup();
     }

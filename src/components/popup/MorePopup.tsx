@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { useRedux } from "../../hooks/useRedux";
-import type { Object } from "../../store/tasksSlice";
+import type { Task } from "../../store/tasksSlice";
+import type { Event } from "../../store/eventsSlice";
 import dayjs from "dayjs";
 
 export const MorePopup = ({
@@ -9,7 +10,7 @@ export const MorePopup = ({
   closePopup,
 }: {
   day: dayjs.Dayjs;
-  selectInfo: (info: Object, type: "tasks" | "events") => void;
+  selectInfo: (info: Task | Event) => void;
   closePopup: () => void;
 }) => {
   const { useAppSelector } = useRedux();
@@ -53,7 +54,7 @@ export const MorePopup = ({
               onClick={(e) => {
                 e.preventDefault();
                 closePopup();
-                selectInfo(task, "tasks");
+                selectInfo(task);
               }}
             >
               <div
@@ -76,7 +77,7 @@ export const MorePopup = ({
               onClick={(e) => {
                 e.preventDefault();
                 closePopup();
-                selectInfo(event, "events");
+                selectInfo(event);
               }}
             >
               <div
