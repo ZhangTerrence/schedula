@@ -25,6 +25,10 @@ export const Home = ({ session }: { session: Session | null }) => {
       if (error) {
         alert(error.message);
       } else {
+        data.sort((a: Event, b: Event) => {
+          return new Date(a.date).getTime() - new Date(b.date).getTime();
+        });
+
         for (const event of data) {
           dispatch(addEvent(event as Event));
         }
@@ -42,6 +46,10 @@ export const Home = ({ session }: { session: Session | null }) => {
       if (error) {
         alert(error.message);
       } else {
+        data.sort((a: Task, b: Task) => {
+          return new Date(a.date).getTime() - new Date(b.date).getTime();
+        });
+
         for (const task of data) {
           dispatch(addTask(task as Task));
         }

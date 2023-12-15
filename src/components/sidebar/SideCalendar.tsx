@@ -2,6 +2,7 @@ import { useState, useEffect, Fragment } from "react";
 import { useRedux } from "../../hooks/useRedux";
 import { changeMode } from "../../store/modeSlice";
 import { type CalendarState, updateCalendar } from "../../store/calendarSlice";
+import { EventsList } from "./EventsList";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 import dayjs from "dayjs";
 import generateMonth from "../../utilities/generateMonth";
@@ -233,12 +234,7 @@ export const SideCalendar = () => {
           })}
         </div>
       </div>
-      <div className={"w-full space-y-2"}>
-        <h1 className={"text-center text-xl text-negative underline"}>
-          Events
-        </h1>
-        <div></div>
-      </div>
+      <EventsList />
     </div>
   );
 };
