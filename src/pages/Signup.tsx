@@ -16,8 +16,8 @@ export const Signup = () => {
 
   const getURL = () => {
     let url =
-      import.meta.env.NEXT_PUBLIC_SITE_URL ??
-      import.meta.env.NEXT_PUBLIC_VERCEL_URL ??
+      import.meta.env.VITE_NEXT_PUBLIC_SITE_URL ??
+      import.meta.env.VITE_NEXT_PUBLIC_VERCEL_URL ??
       "http://localhost:3000/";
 
     url = url.includes("http") ? url : `https://${url}`;
